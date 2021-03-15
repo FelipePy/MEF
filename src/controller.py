@@ -1,39 +1,16 @@
 from src.transition import Transition
 from src.state import State
 
-
-"Transições -> {" \
-"1: '08:00', " \
-"2: '12:00', " \
-"3: '13:00', " \
-"4: '18:00', " \
-"5: '22:00'}"
-
-"Estados -> {" \
-"1: 'Acordado', " \
-"2: 'Trabalhando', " \
-"3: 'Descansando', " \
-"4: 'Dormindo'}"
-
-
-"acordado : descansando 3 - 18 ou 12 / trabalhando 2 - 13"
-"trabalhando : descansando 3 - 18"
-"descansando : trabalhando 2 - 13/ dormindo 4 - 22"
-"dormindo : acordado 1 - 08"
-
 class Controller:
 
-    def __init__(self, initial_state=4, transition=0):
+    def __init__(self, initial_state=4):
         self.class_state = State(initial_state)
         self.class_transition = Transition()
 
-    """
-    @get_transition_possible 
-    Esse método retorna as possíveis transições para o estado atual
-    """
-
-    # Para quando as possiveis transições forem igual a transição, enviar transição junto
     def get_transition_possible(self):
+        """
+        :return: As possiveis transições para o estado atual
+        """
         state = self.class_state.state
         for key_s, states in self.class_state.states.items():
             if state == key_s:
@@ -57,25 +34,29 @@ class Controller:
 
 
     def do_transition(self, transition):
-        returned = 0 # Estado que será retornado
+        """
+        :param transition: Transição que levará a um novo estado
+        :return: Um novo estado de acordo com a transição
+        """
+        state = 0
 
         if self.class_state.state == 1 and (transition == 2 or transition == 3):
             if transition == 2:
-                returned = 3
+                state = 3
             elif transition == 3:
-                returned = 2
+                state = 2
 
         if self.class_state.state == 2 and transition == 4:
-            returned = 3
+            state = 3
 
         if self.class_state.state == 3 and (transition == 3 or transition == 5):
             if transition == 3:
-                returned = 2
+                state = 2
                 
             elif transition == 5:
-                returned = 4
+                state = 4
 
         if self.class_state.state == 4 and transition == 1:
-            returned = 1
+            state = 1
 
-        return returned
+        return state

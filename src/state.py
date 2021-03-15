@@ -7,27 +7,25 @@ class State:
         self.state = self.state_initial
 
     def set_state(self, state):
+        """
+        :param state: Novo valor para o estado
+        :return:
+        """
         self.state = state
 
-    def set_state_actual(self, state_actual):
-        self.previus_state = state_actual
+    def set_state_actual(self, previus_state):
+        """
+        :param previus_state: Estado anterior ao atual
+        :return:
+        """
+        self.previus_state = previus_state
 
     def get_state_name(self):
+        """
+        :return: O nome a ação do estado atual
+        """
         state = self.state
         for key, name in self.states.items():
             if state == key:
                 return name[0]
 
-    def get_name_state(self):
-        list_states = []
-        for value in self.states.values():
-            list_states.append(value[0])
-
-        return list_states
-
-    def get_key_state(self):
-        list_keys = []
-        for key in self.states.keys():
-            list_keys.append(key)
-
-        return list_keys
