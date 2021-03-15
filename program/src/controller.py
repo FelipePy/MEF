@@ -1,14 +1,16 @@
 from program.src.transition import Transition
-from program.src.state import State
 
 class Controller:
 
-    def __init__(self, initial_state=4):
-        self.class_state = State(initial_state)
+    def __init__(self):
         self.class_transition = Transition()
 
     def get_transition_possible(self, current_state: int, previous_state: int, states: dict, transition: Transition):
         """
+        :param current_state: Estado atual
+        :param previous_state: Estado anterior
+        :param states: Dicionário dos estados
+        :param transition: Transição
         :return: As possiveis transições para o estado atual
         """
         state = current_state
@@ -36,6 +38,7 @@ class Controller:
     def do_transition(self, transition:  int, current_state:int) -> int:
         """
         :param transition: Transição que levará a um novo estado
+        :param current_state: Estado atual
         :return: Um novo estado de acordo com a transição
         """
         state = 0

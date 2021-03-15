@@ -15,7 +15,7 @@ class State:
 
     def set_previous_state(self, previous_state):
         """
-        :param previus_state: Estado anterior ao atual
+        :param previous_state: Estado anterior ao atual
         :return:
         """
         self.previous_state = previous_state
@@ -30,10 +30,19 @@ class State:
                 return name[0]
 
     def get_previous_state(self):
+        """
+        :return: Estado anterior
+        """
         return self.previous_state
 
     def get_current_state(self):
+        """
+        :return: Estado atual
+        """
         return self.current_state
 
-    def get_states(self):
+    def get_states(self) -> dict:
+        """
+        :return: Um dicionário com todos os estados, seu nome e suas possíveis transições
+        """
         return self.states

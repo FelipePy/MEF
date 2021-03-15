@@ -1,14 +1,14 @@
 from program.src.state import State
-from program.src.transition import Transition
 from program.database.connect_db import Connect_db
 from program.src.controller import Controller
-
+from program.src.transition import Transition
 
 class Main:
     is_logged = False
     connection = Connect_db()
     is_connected = connection.connect()
-
+    controller = Controller()
+    class_transition = Transition()
     if is_connected:
         login = str(input("Digite seu login: "))
         password = str(input("Digite sua senha: "))
@@ -19,16 +19,13 @@ class Main:
             print(f"===== Seja bem vindo {is_logged[0]} =====")
             print("\nOBS: Estado padrão 0\n")
 
-            class_state = State(1)
-            class_transition = Transition()
-
             while True:
                 print("Estados ->")
-                for key, name in class_state.states.items():
+                state_initial = State()
+                for key, name in state_initial.get_states().items():
                     print(f"{key} - {name[0]}")
                 try:
                     initial_state = int(input("Digite o estado inicial: "))
-
                     if initial_state in range(1, 5):
                         break
                     elif initial_state == 0:
@@ -38,15 +35,15 @@ class Main:
                 except:
                     print("Tipo esperado -> int")
 
-            controller = Controller(initial_state)
+            class_state = State(initial_state)
             transition = 0
             while True:
-                transition_possible = controller.get_transition_possible(controller.class_state.get_current_state(),
-                                                                         controller.class_state.get_previous_state(),
-                                                                         controller.class_state.get_states(),
-                                                                         controller.class_transition)
+                transition_possible = controller.get_transition_possible(class_state.get_current_state(),
+                                                                         class_state.get_previous_state(),
+                                                                         class_state.get_states(),
+                                                                         class_transition)
 
-                print(f"\n\n\nEstado atual -> {controller.class_state.get_current_state_name()}")
+                print(f"\n\n\nEstado atual -> {class_state.get_current_state_name()}")
                 if type(transition_possible[0]) == list:
                     print(f"Transições possíveis -> \033[32m({transition_possible[0][0]} - {transition_possible[1][0]}) "
                           f"e ({transition_possible[0][1]} - {transition_possible[1][1]})\033[0m")
@@ -58,9 +55,9 @@ class Main:
                             print("Tipo esperado -> int")
 
                         if transition in transition_possible[0]:
-                            state = controller.do_transition(transition, controller.class_state.get_current_state())
-                            controller.class_state.set_previous_state(controller.class_state.get_current_state())
-                            controller.class_state.set_current_state(state)
+                            state = controller.do_transition(transition, class_state.get_current_state())
+                            class_state.set_previous_state(class_state.get_current_state())
+                            class_state.set_current_state(state)
                             break
                         else:
                             print("\n\n\033[31mTransição incorreta! Tente novamente\033[0m", end='')
@@ -74,9 +71,9 @@ class Main:
                         except:
                             print("Tipo esperado -> int")
                         if transition in transition_possible:
-                            state = controller.do_transition(transition, controller.class_state.get_current_state())
-                            controller.class_state.set_previous_state(controller.class_state.get_current_state())
-                            controller.class_state.set_current_state(state)
+                            state = controller.do_transition(transition, class_state.get_current_state())
+                            class_state.set_previous_state(class_state.get_current_state())
+                            class_state.set_current_state(state)
 
                             break
                         else:
