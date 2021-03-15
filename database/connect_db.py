@@ -30,12 +30,13 @@ class Connect_db:
     def login(self, login, password):
         if self.connection.is_connected():
             try:
-                self.cursor.execute("SELECT login, pass FROM cadastrados WHERE login=%s", (login,))
+                command_sql = "SELECT login, pass FROM cadastrados WHERE login=%s"
+                self.cursor.execute(command_sql, (login,))
                 logged = self.cursor.fetchone()
             except:
                 return None, False
 
-            if logged != None and logged[1] == password and logged[0] == login:
+            if logged != None and logged[0] == login and logged[1] == password:
                 return logged[0], True
             else:
                 return 0, False
@@ -43,11 +44,13 @@ class Connect_db:
             return 1, False
 
     def cadaster(self, login, password):
-        self.cursor.execute("SELECT login FROM cadastrados WHERE login=%s", (login,))
+        command_sql = "SELECT login, pass FROM cadastrados WHERE login=%s"
+        self.cursor.execute(command_sql, (login,))
         logged = self.cursor.fetchone()
         if logged != None and login == logged[0]:
             return True
         else:
-            self.cursor.execute("INSERT INTO cadastrados (id, login, pass)VALUES(null, %s, %s)", (login, password))
+            command_sql = "INSERT INTO cadastrados (id, login, pass)VALUES(null, %s, %s)"
+            self.cursor.execute(command_sql, (login, password))
             self.connection.commit()
             return False
