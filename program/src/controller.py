@@ -5,33 +5,33 @@ class Controller:
     def __init__(self):
         self.class_transition = Transition()
 
-    def get_transition_possible(self, current_state: int, previous_state: int, states: dict, transition: Transition):
+    def get_transition_possible(self, current_state: int, previous_state: int, states: dict):
         """
         :param current_state: Estado atual
         :param previous_state: Estado anterior
         :param states: Dicionário dos estados
-        :param transition: Transição
         :return: As possiveis transições para o estado atual
         """
-        state = current_state
-        for key_s, states in states.items():
-            if state == key_s:
-                if state == 3 and previous_state == 2:
-                    value = states
-                    states = []
+
+        for key_s, transitions in states.items():
+            if current_state == key_s:
+                if current_state == 3 and previous_state == 2:
+                    value = transitions
+                    transitions = []
                     for item in value:
                         if item != 3:
-                            states.append(item)
+                            transitions.append(item)
 
-                index = len(states)
+                index = len(transitions)
                 if index == 3:
-                    list_states = [states[1], states[2]]
-                    hour_transition = [transition.get_hour(states[1]),
-                                       transition.get_hour(states[2])]
+                    list_states = [transitions[1], transitions[2]]
+                    hour_transition = [self.class_transition.get_hour(transitions[1]),
+                                       self.class_transition.get_hour(transitions[2])]
                     list_global = [list_states, hour_transition]
                     return list_global
                 else:
-                    return states[1], self.class_transition.get_hour(states[1])
+                    return transitions[1], self.class_transition.get_hour(transitions[1])
+        return 0
 
 
 
@@ -39,7 +39,7 @@ class Controller:
         """
         :param transition: Transição que levará a um novo estado
         :param current_state: Estado atual
-        :return: Um novo estado de acordo com a transição
+        :ret  urn: Um novo estado de acordo com a transição
         """
         state = 0
 

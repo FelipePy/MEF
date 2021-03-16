@@ -1,11 +1,11 @@
 from program.src.state import State
-from program.database.connect_db import Connect_db
+from program.database.connect_db import ConnectDB
 from program.src.controller import Controller
 from program.src.transition import Transition
 
 class Main:
     is_logged = False
-    connection = Connect_db()
+    connection = ConnectDB()
     is_connected = connection.connect()
     controller = Controller()
     class_transition = Transition()
@@ -40,8 +40,7 @@ class Main:
             while True:
                 transition_possible = controller.get_transition_possible(class_state.get_current_state(),
                                                                          class_state.get_previous_state(),
-                                                                         class_state.get_states(),
-                                                                         class_transition)
+                                                                         class_state.get_states())
 
                 print(f"\n\n\nEstado atual -> {class_state.get_current_state_name()}")
                 if type(transition_possible[0]) == list:
@@ -91,7 +90,7 @@ class Main:
                     password = str(input("Digite sua senha: "))
                     is_cadaster = connection.cadaster(login, password)
 
-                    if is_cadaster:
+                    if not is_cadaster:
                         print("Usuário ja cadastrado, reinicie e tente fazer o login novamente\n\n")
                         exit(0)
 
