@@ -14,6 +14,10 @@ class ConnectDB:
 
 
     def connect(self):
+        """
+        Método para criar uma conexão com o banco de dados
+        :return: bool
+        """
         try:
             self.connection = mysql.connector.connect(
                 host=self.host,
@@ -27,6 +31,10 @@ class ConnectDB:
             return False
 
     def disconnect(self):
+        """
+        Método para desconecatar do banco de dados
+        :return: bool
+        """
         try:
             self.cursor.close()
             self.connection.close()
@@ -35,6 +43,12 @@ class ConnectDB:
             return False
 
     def login(self, login, password):
+        """
+        Método para fazer login no sistema
+        :param login: Nome do usuário
+        :param password: Senha do usuário
+        :return: tuple
+        """
         if self.connection.is_connected():
             try:
                 command_sql = "SELECT login, pass FROM cadastrados WHERE login=%s"
@@ -51,6 +65,12 @@ class ConnectDB:
             return 1, False
 
     def cadaster(self, login, password):
+        """
+        Método para cadastrar-se no sistema
+        :param login: Nome do usuário
+        :param password: Senha do usuário
+        :return: bool
+        """
         if type(self.connection) != tuple:
             command_sql = "SELECT login, pass FROM cadastrados WHERE login=%s"
             self.cursor.execute(command_sql, (login,))
