@@ -1,14 +1,17 @@
 import mysql.connector
 
 
-class Connect_db:
+class ConnectDB:
 
-    host = 'localhost'
-    database = 'mef'
-    user = 'root'
-    password = ''
-    connection = None
+    connection = None,
     cursor = None
+
+    def __init__(self, host = 'localhost', database = 'mef', user = 'root', password = ''):
+        self.host = host
+        self.database = database
+        self.user = user
+        self.password = password
+
 
     def connect(self):
         try:
@@ -24,8 +27,12 @@ class Connect_db:
             return False
 
     def disconnect(self):
-        self.cursor.close()
-        self.connection.close()
+        try:
+            self.cursor.close()
+            self.connection.close()
+            return True
+        except:
+            return False
 
     def login(self, login, password):
         if self.connection.is_connected():
@@ -44,13 +51,16 @@ class Connect_db:
             return 1, False
 
     def cadaster(self, login, password):
-        command_sql = "SELECT login, pass FROM cadastrados WHERE login=%s"
-        self.cursor.execute(command_sql, (login,))
-        logged = self.cursor.fetchone()
-        if logged != None and login == logged[0]:
-            return True
-        else:
-            command_sql = "INSERT INTO cadastrados (id, login, pass)VALUES(null, %s, %s)"
-            self.cursor.execute(command_sql, (login, password))
-            self.connection.commit()
-            return False
+        if type(self.connection) != tuple:
+            command_sql = "SELECT login, pass FROM cadastrados WHERE login=%s"
+            self.cursor.execute(command_sql, (login,))
+            logged = self.cursor.fetchone()
+
+            if logged != None and login == logged[0]:
+                return False
+            else:
+                command_sql = "INSERT INTO cadastrados (id, login, pass)VALUES(null, %s, %s)"
+                self.cursor.execute(command_sql, (login, password))
+                self.connection.commit()
+                return True
+        return 0
